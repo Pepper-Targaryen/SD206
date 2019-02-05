@@ -92,3 +92,53 @@ halfSibling(X,Y) :-
   father(F1,X),
   father(F2,Y),
   F1 \== F2.
+
+even([]).
+even([A|B]) :-
+  even(A),
+  even(B).
+even([A|B]) :-
+  odd(A),
+  odd(B).
+
+odd(A) :-
+  not(even(A)). 
+
+%last_elt(Element, [Rest | Element], Rest).
+last_elt([_|L], E) :- 
+    last_elt(L, E). 
+last_elt([E], E). 
+  
+
+extract(X, [X|L], L).
+extract(X, [Y|L], [Y|L1]):-
+  extract(X, L, L1).
+
+%attach(A,B,[A|B])
+attach([ ], L, L).
+attach([X|L1], L2, [X|L3]) :- 
+    attach(L1, L2, L3).
+
+multiplex([X1], [X2], [[X1, X2]]).
+multiplex([X1|Y1], [X2|Y2], [[X1, X2] | L]):-
+  multiplex(Y1, Y2, L).
+
+assemble(L1, L2, L3, Result):-
+  attach(L1,L2, T),
+  attach(T,L3, Result).
+
+%where IncludedList is a continuous ‘chunk’ of the list IncludingList.
+%For instance, sub_list([3, 4], [1, 2, 3, 4, 5, 6]) should succeed.
+sub_list(L1, L2) :-
+  assemble(_, L1, _, L2).
+
+remove(X, M, L):-
+  member(X, M),
+  extract(X, M, L1),
+  remove(X, L1, L),
+  !.
+remove(_, L, L).
+
+duplicate([], []).
+duplicate([X | L], [X, X | LL]):-
+  duplicate(L, LL).
