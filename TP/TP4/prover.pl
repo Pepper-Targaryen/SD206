@@ -95,4 +95,5 @@ resolve(CNF) :-
 
 /* TEST */
 go :-
-    prove( ((a imp (b imp c)) imp ((a imp b) imp (a imp c))) ).
+    %prove( ((a imp (b imp c)) imp ((a imp b) imp (a imp c))) ).
+    prove(  (a(X) imp (b imp c)) imp (( a(Y) imp b) imp (a(3) imp c))).
