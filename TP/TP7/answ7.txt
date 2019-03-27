@@ -1,0 +1,53 @@
+1
+aaaa
+abcd
+wxyz
+pqrs
+djxk
+
+2
+a a a a:    F C R(3)
+a b c d:    F I(1) R(3)
+w x y z:    L I(1) O R(3) M 
+p q r s:    G(16) I(1) R(3)
+d j x k:    G(4) G(10) G(24) G(11)
+
+3
+Suppose we order our operations as C, I, R, G, F, L, O, M and code them by their rank. 
+The complexities of the operators are 1, 2, 2, 3, 3, 3, 3, 4 respectively. 
+We get the following complexities:
+a a a a:    F C R(3)    →    3 + 1 + 2 + 2 = 8 bits
+a b c d:    F I(1) R(3)    →    3 + 2 + 1 + 2 + 2 = 10 bits
+w x y z:    L I(1) O R(3) M    →    3 + 2 + 1 + 4 + 2 + 2 + 4 = 18 bits
+p q r s:    G(16) I(1) R(3)    →    3 + 6 + 1 + 1 + 2 + 2 = 15 bits
+d j x k:    G(4) G(10) G(24) G(11)    →    3 + 3 + 3 + 4 + 3 + 5 + 3 + 4 = 28 bits
+
+These are estimates. Slightly lower values can be obtained with a more efficient coding.
+
+4
+testCompress2 :-
+    L = [31,31,31,31,32,32,32,32,33,33,33,33,34,34,34,34,35,35,35,35,36,36,36,36],
+        write('original list: \t'),write(L),nl,
+    complexity(L,CL,_),
+    complexity(CL,CCL,_),
+        write('compressed list: \t'),write(CCL),nl,
+    compress(CL1,CCL),
+    compress(L1,CL1),
+    !, % necessary, since reversibility is not perfect
+        write('recovered list: \t'), write(L1),nl.
+We get: [cs,6,[c,4],1,31,32,33,34,35,36] 
+The initial list is correctly decompressed using compress twice reversively.
+
+5
+increment(_, 0, L, L).
+
+increment(X, Times, [Y|Ys], Rest) :-
+    plusOne(X,Y),
+    increment(Y, Times1, Ys, Rest),
+    Times is Times1 + 1.
+
+?- testCompress2.
+original list: [31,31,31,31,32,32,32,32,33,33,33,33,34,34,34,34,35,35,35,35,36,36,36,36]
+compressed list: [cs,6,[c,4],1,inc,31,5]
+recovered list: [31,31,31,31,32,32,32,32,33,33,33,33,34,34,34,34,35,35,35,35,36,36,36,36]
+true.
